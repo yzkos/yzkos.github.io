@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <title>kindle阅读</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style>
+        #app {
+            font-family: Avenir, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: #2c3e50;
+            margin: 0;
+            height: 100%
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        @font-face {
+            font-style: normal;
+            font-weight: 400
+        }
+
+        .index-wrapper {
+            height: 100%;
+            width: 100%;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: row;
+            flex-direction: row
+        }
+
+        .index-wrapper .navigation-wrapper {
+            min-width: 260px;
+            padding: 20px 24px;
+            box-sizing: border-box;
+            width: 100%
+        }
+
+        .index-wrapper .navigation-title-wrapper {
+            white-space: nowrap;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            -webkit-box-align: end;
+            -ms-flex-align: end;
+            align-items: flex-end
+        }
+
+        .index-wrapper .navigation-wrapper .set-url {
+            text-align: center;
+            display: none;
+            margin: 20px;
+        }
+
+        .index-wrapper .navigation-wrapper .set-url input {
+            width: 80%;
+            margin: 20px;
+            background: none;
+            outline: none;
+            border: 1px solid #000000;
+            padding: 10px;
+        }
+
+        .index-wrapper .navigation-wrapper .set-url .done {
+            border: 1px solid #000000;
+            width: 200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .index-wrapper .navigation-wrapper .navigation-title {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .index-wrapper .shelf-wrapper {
+            padding: 48px 48px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column
+        }
+
+        .index-wrapper .shelf-wrapper .books-wrapper {
+            overflow: scroll
+        }
+
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 380px);
+            -ms-flex-pack: distribute;
+            justify-content: space-around;
+            grid-gap: 10px
+        }
+
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper .book {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            cursor: pointer;
+            margin-bottom: 18px;
+            padding: 24px 24px;
+            width: 360px;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            -ms-flex-pack: distribute;
+            justify-content: space-around
+        }
+
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper .book .cover-img .cover,
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper .book .cover-img {
+            width: 84px;
+            height: 112px
+        }
+
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper .book .info {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -ms-flex-pack: distribute;
+            justify-content: space-around;
+            height: 112px;
+            margin-left: 20px;
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1
+        }
+
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper .book .info .name {
+            width: fit-content;
+            font-size: 22px;
+            font-weight: 700;
+            color: #33373d;
+            word-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            text-align: left;
+        }
+
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper .book .info .sub {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            font-size: 13px;
+            margin-top: 13px;
+            font-weight: 600;
+            color: #6b6b6b
+        }
+
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper .book .info .sub .dot {
+            margin: 0 7px
+        }
+
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper .book .info .dur-chapter,
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper .book .info .intro,
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper .book .info .last-chapter {
+            color: #6b6b6b;
+            font-size: 13px;
+            margin-top: 13px;
+            font-weight: 500;
+            word-wrap: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            text-align: left
+        }
+
+        .index-wrapper .shelf-wrapper .books-wrapper .wrapper:last-child {
+            margin-right: auto
+        }
+
+        .index-wrapper .shelf-wrapper .books-wrapper::-webkit-scrollbar {
+            width: 0 !important
+        }
+
+        @media screen and (max-width: 750px) {
+            .index-wrapper {
+                overflow-x: hidden;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                -ms-flex-direction: column;
+                flex-direction: column
+            }
+
+            .index-wrapper .shelf-wrapper {
+                padding: 0
+            }
+
+            .index-wrapper .shelf-wrapper .shelf-title {
+                padding: 20px 24px 0 24px
+            }
+
+            .index-wrapper .shelf-wrapper .books-wrapper .wrapper {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                -ms-flex-direction: column;
+                flex-direction: column
+            }
+
+            .index-wrapper .shelf-wrapper .books-wrapper .wrapper .book {
+                box-sizing: border-box;
+                width: 100%;
+                margin-bottom: 0;
+                padding: 10px 20px
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div id="app">
+    <div class="index-wrapper">
+        <div class="navigation-wrapper">
+            <div class="navigation-title-wrapper">
+                <div class="navigation-title">阅读</div>
+                <div class="navigation-sub-title" onclick="openSet()">设置链接</div>
+            </div>
+            <div class="set-url">
+                <label>阅读 web 服务链接（设置自己的链接后才能使用） <input type="text" id="url" value=""></label>
+                <div class="done" onclick="setUrl()">确定</div>
+            </div>
+        </div>
+        <div class="shelf-wrapper">
+            <div class="books-wrapper">
+                <div class="wrapper" id="book_list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="book.js2"></script>
+<script>
+    getList();
+</script>
+</body>
+
+</html>
